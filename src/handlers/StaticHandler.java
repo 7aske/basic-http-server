@@ -9,22 +9,24 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class StaticHandler implements HttpHandler {
 	private String root;
 	private Path cwd = Paths.get(System.getProperty("user.dir"));
 	private String rootFolder = "/src/statics";
-	private Stream<Path> validPaths;
+	private List<Path> validPaths;
 
 	public StaticHandler(String root) {
 		this.root = root;
 		try {
 			// validPaths = Stream.of(Paths.get("/home/nik/Documents/CODE/java/deployment-server-java/src/statics/css/style.css"), Paths.get("/home/nik/Documents/CODE/java/deployment-server-java/src/statics/index.html"));
-			validPaths = Files.walk(Paths.get(cwd.toString(), rootFolder)).filter(p -> Files.isRegularFile(p));
+			validPaths = Files.walk(Paths.get(cwd.toString(), rootFolder)).filter(p -> Files.isRegularFile(p)).collect(Collectors.toList());
 			validPaths.forEach(System.out::println);
 		} catch (IOException e) {
-			validPaths = Stream.of();
+			validPaths = new ArrayList<>();
 		}
 	}
 
@@ -35,13 +37,10 @@ public class StaticHandler implements HttpHandler {
 		String content;
 		String contentType = getContentType(path);
 		int status = 200;
-
-		if (validPaths.anyMatch(p -> p.startsWith(path) || p.startsWith("index.html"))) {
+		if (validPaths.contains(parsePath(path))) {
 			content = readFile(parsePath(path));
-			System.out.printf("cont %s", content);
 		} else {
 			content = "404 (ノಠ益ಠ)ノ彡┻━┻";
-			System.out.printf("cont %s", content);
 			status = 404;
 		}
 		httpExchange.getResponseHeaders().set("Content-Type", contentType);
