@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class StaticHandler implements HttpHandler {
@@ -21,8 +20,9 @@ public class StaticHandler implements HttpHandler {
 	public StaticHandler(String root) {
 		this.root = root;
 		try {
+			// validPaths = Stream.of(Paths.get("/home/nik/Documents/CODE/java/deployment-server-java/src/statics/css/style.css"), Paths.get("/home/nik/Documents/CODE/java/deployment-server-java/src/statics/index.html"));
 			validPaths = Files.walk(Paths.get(cwd.toString(), rootFolder)).filter(p -> Files.isRegularFile(p));
-			validPaths.forEach(p -> System.out.printf("%s\n", p.toString()));
+			validPaths.forEach(System.out::println);
 		} catch (IOException e) {
 			validPaths = Stream.of();
 		}
@@ -35,8 +35,8 @@ public class StaticHandler implements HttpHandler {
 		String content;
 		String contentType = getContentType(path);
 		int status = 200;
-		Predicate<Path> pred = p -> p.endsWith(path) || p.endsWith("index.html");
-		if (validPaths.anyMatch(pred)){
+
+		if (validPaths.anyMatch(p -> p.startsWith(path) || p.startsWith("index.html"))) {
 			content = readFile(parsePath(path));
 			System.out.printf("cont %s", content);
 		} else {
