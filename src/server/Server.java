@@ -1,7 +1,7 @@
 package server;
 
 import com.sun.net.httpserver.HttpServer;
-import handlers.StaticHandler;
+import handlers.GetHandler;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -14,7 +14,7 @@ public class Server {
 			return;
 		}
 		HttpServer httpServer = HttpServer.create();
-		httpServer.createContext("/", new StaticHandler(args[0]));
+		httpServer.createContext("/", new GetHandler(args[0]));
 		int port = args.length > 1 ? Integer.parseInt(args[1]) : 8000;
 		try {
 			httpServer.bind(new InetSocketAddress("localhost", port), 100);

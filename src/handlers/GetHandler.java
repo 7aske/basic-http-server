@@ -13,13 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class StaticHandler implements HttpHandler {
+public class GetHandler implements HttpHandler {
 	private String root;
 	private Path cwd = Paths.get(System.getProperty("user.dir"));
 	private String rootFolder = "/src/statics";
 	private List<Path> validPaths;
 
-	public StaticHandler(String root) {
+	public GetHandler(String root) {
 		this.root = root;
 		try {
 			// validPaths = Stream.of(Paths.get("/home/nik/Documents/CODE/java/deployment-server-java/src/statics/css/style.css"), Paths.get("/home/nik/Documents/CODE/java/deployment-server-java/src/statics/index.html"));
@@ -35,14 +35,18 @@ public class StaticHandler implements HttpHandler {
 		String path = httpExchange.getRequestURI().getPath();
 		System.out.printf("%s %s\n", httpExchange.getRequestMethod().toUpperCase(), path);
 		String content;
-		String contentType = getContentType(path);
-		int status = 200;
+		String contentType;
+		int status;
 		if (validPaths.contains(parsePath(path))) {
 			content = readFile(parsePath(path));
+			contentType = getContentType(path);
+			status = 200;
 		} else {
 			content = "404 (ノಠ益ಠ)ノ彡┻━┻";
+			contentType = "text/html";
 			status = 404;
 		}
+		//System.out.printf("%s %s %s", content, content.length(), contentType);
 		httpExchange.getResponseHeaders().set("Content-Type", contentType);
 		httpExchange.sendResponseHeaders(status, content.length());
 		httpExchange.getResponseBody().write(content.getBytes());
@@ -69,7 +73,7 @@ public class StaticHandler implements HttpHandler {
 			return "text/css";
 		else if (ct.endsWith(".json"))
 			return "application/json";
-		else return "text/html";
+		else return "text/plain";
 	}
 
 	public String readFile(Path path) {
