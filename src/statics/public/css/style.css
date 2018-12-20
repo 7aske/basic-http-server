@@ -1,0 +1,297 @@
+* {
+  font-family: 'Ubuntu', sans-serif;
+}
+
+body,
+html {
+  margin: 0px;
+  padding: 0px;
+  background-color: #dddddd;
+}
+
+a {
+  text-decoration: none;
+  color: #343434;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.container-fluid {
+  padding: 0px !important;
+}
+
+#header {
+  -webkit-transition: all 500ms;
+  transition: all 500ms;
+  width: 100%;
+  height: 50px;
+  background-color: #343434;
+  position: fixed;
+  top: 0;
+  z-index: 100;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  color: #dddddd;
+  top: -50px;
+}
+
+#header .col {
+  line-height: 50px;
+  font-size: 28px;
+}
+
+#header #menu {
+  padding: 5px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+}
+
+#header #menu .skill {
+  color: #dddddd;
+  text-align: center;
+  padding: 8px;
+  border-radius: 5px;
+  width: 110px;
+  border: 2px solid #dddddd;
+  line-height: 18px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+#header #menu .skill i {
+  -webkit-transition: all 500ms;
+  transition: all 500ms;
+  -moz-transition-timing-function: ease-in-out;
+}
+
+#header #menu .skill:hover i {
+  -webkit-transform: rotate(360deg);
+          transform: rotate(360deg);
+}
+
+#header #menu .highlighted {
+  background-color: #dddddd;
+  color: #343434;
+}
+
+#slider {
+  background-image: url(http://agilemanagementoffice.com/wp-content/uploads/2017/10/computer-laptop-work-office.jpg);
+  background-size: 100%;
+  background-attachment: fixed;
+  padding-top: 23%;
+}
+
+#slider .name-container {
+  background-image: url(../images/name-container.png);
+  background-color: #565656;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+#slider .name-container .name-image {
+  margin: auto;
+  width: 300px;
+  height: 300px;
+  margin-top: -150px;
+  overflow: hidden;
+  border: 3px solid #343434;
+  border-radius: 50%;
+}
+
+#slider .name-container .name-image img {
+  position: relative;
+  left: -75px;
+  height: inherit;
+}
+
+#slider .name-container .name-title {
+  color: #dddddd;
+  text-shadow: 0px 0px 1px #dddddd;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 15px;
+  text-align: center;
+  font-size: 50px;
+}
+
+#slider .name-container .name-text {
+  font-family: 'Pacifico', cursive;
+  margin-bottom: 25px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 15px;
+  color: #dddddd;
+  letter-spacing: 1em;
+  text-align: center;
+  font-size: 24px;
+}
+
+#slider .skills-container {
+  position: relative;
+  border-top: 3px solid #343434;
+  border-bottom: 3px solid #343434;
+  background-color: #6b6b6b;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 50px 0px;
+}
+
+#slider .skills-container .container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+#slider .skills-container .container a {
+  -webkit-box-shadow: 0px 0px 2px #343434;
+          box-shadow: 0px 0px 2px #343434;
+  text-shadow: 0px 0px 1px #343434;
+  font-weight: 700;
+  color: #dddddd;
+  border-radius: 50%;
+  width: 90px;
+  height: 90px;
+  padding: 10px;
+  border: 2px solid #343434;
+  text-align: center;
+  font-size: 18px;
+  line-height: 24px;
+  -webkit-transition: all 300ms;
+  transition: all 300ms;
+  cursor: pointer;
+}
+
+#slider .skills-container .container a i {
+  color: #343434;
+  -webkit-transition: all 500ms;
+  transition: all 500ms;
+  -webkit-transition-timing-function: ease-in-out;
+          transition-timing-function: ease-in-out;
+  font-size: 32px;
+}
+
+#slider .skills-container .container a:hover i {
+  -webkit-transform: rotate(360deg);
+          transform: rotate(360deg);
+}
+
+#skills div {
+  padding-top: 10px;
+  border-bottom: 2px solid rgba(99, 99, 99, 0.5);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+#skills div img {
+  padding: 5px;
+  margin: 25px 0px;
+  height: 200px;
+  -webkit-box-shadow: 0px 0px 0px black;
+          box-shadow: 0px 0px 0px black;
+  border-radius: 5px;
+  -webkit-transition: all 400ms ease-in-out;
+  transition: all 400ms ease-in-out;
+}
+
+#skills div:hover img:hover {
+  -webkit-box-shadow: 0px 5px 15px black;
+          box-shadow: 0px 5px 15px black;
+  -webkit-transform: scale(1.05);
+          transform: scale(1.05);
+}
+
+#skills div p {
+  padding: 50px;
+}
+
+.divider {
+  height: 150px;
+  background-color: #343434;
+  text-align: center;
+  color: #dddddd;
+  font-size: 44px;
+  line-height: 150px;
+}
+
+#work {
+  padding-top: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+#work a {
+  color: #0093f5;
+  -webkit-transition: all 200ms;
+  transition: all 200ms;
+}
+
+#work a:hover {
+  color: #343434;
+}
+
+#about .about-text {
+  padding: 30px 10%;
+}
+
+#about .about-float-img {
+  border: 2px solid #343434;
+  margin-right: 20px;
+  border-radius: 50%;
+  height: 200px;
+  float: left;
+}
+
+#about .about-list {
+  text-align: center;
+}
+
+#contact {
+  padding: 40px 20%;
+}
+
+#contact h3 {
+  margin: 30px 0px;
+}
+
+#contact .btn-lg {
+  color: #eeeeee;
+  background-color: #616161;
+  border: 2px solid #494949;
+  -webkit-transition: all 200ms ease-in-out;
+  transition: all 200ms ease-in-out;
+}
+
+#contact .btn-lg:hover {
+  -webkit-filter: invert(1);
+          filter: invert(1);
+}
+
+.bg-dark {
+  background-color: #343434 !important;
+}
+/*# sourceMappingURL=style.css.map */
