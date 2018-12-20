@@ -15,16 +15,17 @@ import java.util.stream.Collectors;
 import static handlers.utils.HandlerUtils.*;
 
 public class RootHandler implements HttpHandler {
-	private Path cwd = Paths.get(System.getProperty("user.dir"));
-	private String rootFolder = "/statics";
+	private String root;
 	private List<Path> validPaths;
 
-	public RootHandler() {
+	public RootHandler(String root) {
+		this.root = root;
 		try {
-			validPaths = Files.walk(Paths.get(cwd.toString(), rootFolder)).filter(p -> Files.isRegularFile(p)).collect(Collectors.toList());
+			validPaths = Files.walk(Paths.get(this.root)).filter(p -> Files.isRegularFile(p)).collect(Collectors.toList());
 		} catch (IOException e) {
 			validPaths = new ArrayList<>();
 		}
+		validPaths.forEach(System.out::println);
 	}
 
 	@Override
@@ -39,9 +40,9 @@ public class RootHandler implements HttpHandler {
 			byte[] content;
 			String contentType;
 			int status;
-
-			if (validPaths.contains(parsePath(this.rootFolder, path))) {
-				content = readResource(new FileInputStream(parsePath(this.rootFolder, path).toString()));
+			System.out.printf("%s\n", parsePath(root, path));
+			if (validPaths.contains(Paths.get(parsePath(root, path)))) {
+				content = readResource(new FileInputStream(parsePath(root, path)));
 				contentType = getContentType(path);
 				status = 200;
 			} else {

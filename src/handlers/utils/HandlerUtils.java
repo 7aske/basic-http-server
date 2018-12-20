@@ -1,19 +1,17 @@
 package handlers.utils;
 
 import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
+import static server.utils.ServerUtils.pathJoin;
 
 public class HandlerUtils {
-	private static Path cwd = Paths.get(System.getProperty("user.dir"));
-
 	// parse request path so it return the absolute path to the requested file
-	public static Path parsePath(String rootFolder, String rel) {
+	public static String parsePath(String root, String rel) {
 		switch (rel) {
 			case "/":
-				return Paths.get(cwd.toString(), rootFolder, "index.html");
+				return pathJoin(root, "index.html");
 			default:
-				return Paths.get(cwd.toString(), rootFolder, rel);
+				return pathJoin(root, rel);
 		}
 
 	}
