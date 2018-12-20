@@ -3,9 +3,7 @@ package handlers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,15 +12,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class GetHandler implements HttpHandler {
-	private String root;
 	private Path cwd = Paths.get(System.getProperty("user.dir"));
 	private String rootFolder = "/src/statics";
 	private List<Path> validPaths;
 
-	public GetHandler(String root) {
-		this.root = root;
+	public GetHandler() {
 		try {
-			// validPaths = Stream.of(Paths.get("/home/nik/Documents/CODE/java/deployment-server-java/src/statics/css/style.css"), Paths.get("/home/nik/Documents/CODE/java/deployment-server-java/src/statics/index.html"));
 			validPaths = Files.walk(Paths.get(cwd.toString(), rootFolder)).filter(p -> Files.isRegularFile(p)).collect(Collectors.toList());
 			validPaths.forEach(System.out::println);
 		} catch (IOException e) {
@@ -34,22 +29,21 @@ public class GetHandler implements HttpHandler {
 	public void handle(HttpExchange httpExchange) throws IOException {
 		String path = httpExchange.getRequestURI().getPath();
 		System.out.printf("%s %s\n", httpExchange.getRequestMethod().toUpperCase(), path);
-		String content;
+		byte[] content;
 		String contentType;
 		int status;
 		if (validPaths.contains(parsePath(path))) {
-			content = readFile(parsePath(path));
+			content = readResource(new FileInputStream(parsePath(path).toString()));
 			contentType = getContentType(path);
 			status = 200;
 		} else {
-			content = "404 (ノಠ益ಠ)ノ彡┻━┻";
-			contentType = "text/html";
+			content = "404 Not Found".getBytes();
+			contentType = "text/plain";
 			status = 404;
 		}
-		//System.out.printf("%s %s %s", content, content.length(), contentType);
 		httpExchange.getResponseHeaders().set("Content-Type", contentType);
-		httpExchange.sendResponseHeaders(status, content.length());
-		httpExchange.getResponseBody().write(content.getBytes());
+		httpExchange.sendResponseHeaders(status, content.length);
+		httpExchange.getResponseBody().write(content);
 		httpExchange.getResponseBody().close();
 
 	}
@@ -64,6 +58,18 @@ public class GetHandler implements HttpHandler {
 
 	}
 
+	private byte[] readResource(InputStream in) throws IOException {
+		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+		OutputStream gout = new DataOutputStream(bout);
+		byte[] tmp = new byte[4096];
+		int r;
+		while ((r = in.read(tmp)) >= 0)
+			gout.write(tmp, 0, r);
+		gout.flush();
+		gout.close();
+		in.close();
+		return bout.toByteArray();
+	}
 	private String getContentType(String ct) {
 		if (ct.endsWith(".js"))
 			return "text/javascript";
@@ -71,24 +77,12 @@ public class GetHandler implements HttpHandler {
 			return "text/html";
 		else if (ct.endsWith(".css"))
 			return "text/css";
+		else if (ct.endsWith(".png"))
+			return "image/png";
+		else if (ct.endsWith(".jpg") || ct.endsWith(".jpg"))
+			return "image/jpeg";
 		else if (ct.endsWith(".json"))
 			return "application/json";
 		else return "text/plain";
-	}
-
-	public String readFile(Path path) {
-		String content = "";
-		try {
-			BufferedReader fileBuffer = new BufferedReader(new FileReader(path.toString()));
-			String str;
-			while ((str = fileBuffer.readLine()) != null) {
-				content += str;
-			}
-			fileBuffer.close();
-		} catch (IOException e) {
-			return "";
-		}
-		System.out.printf("%s", content);
-		return content;
 	}
 }
