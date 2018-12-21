@@ -29,24 +29,29 @@ public class ClientUtils {
 					"</html>";
 
 	public static String generateHTML(String root, String rel) throws IOException {
-		String sep = rel.equals("/") ? "" : "/";
 		String out = HTMLUpper;
-		out += "<bold style=\"font-size:24px\">"+rel+"</bold><hr>";
+		out += "<a style=\"font-size:24px\" href=\"/\">" + rel + "</a><hr>";
+		// some weird lambda sorting
+		// first one sorts files an folders, second one sorts back button to the top
 		List<Path> list = Files.walk(Paths.get(root), 1).sorted((o1, o2) -> Files.isDirectory(o1) ? -1 : 1).collect(Collectors.toList());
 		list.sort((o1,o2)->o1.getFileName().toString().equals(Paths.get(root).getFileName().toString())?-1:1);
 		for (Path p : list) {
+			// Check if the current folder to be rendered the one whoose contents are being rendered
+			// If true render it as a back button
 			if (p.getFileName().toString().equals(Paths.get(root).getFileName().toString())){
 				String parent;
+				// resolving whether the current folder root of the folder tree
+				// trying to get parent of the root folder raises an error
 				try {
 					parent = Paths.get(rel).getParent().toString();
 				} catch (Exception e){
 					parent = "/";
 				}
-				out += String.format("<a style=\"text-decoration:underline;color:black;\" href=\"%s\">&larr;%s</a><br>", parent , "Back");
-			}else if (Files.isDirectory(p)) {
-				out += String.format("<a style=\"color:black;\" href=\"%s\">&#128193;%s/</a><br>", rel + sep + p.getFileName(), p.getFileName());
+				out += String.format("<a style=\"text-decoration:underline;color:black;\" href=\"%s\">&larr;%s</a><br>", parent, "Back");
+			} else if (Files.isDirectory(p)) {
+				out += String.format("<a style=\"color:black;\" href=\"%s/\">&#128193;%s/</a><br>", rel + p.getFileName().toString(), p.getFileName());
 			} else if (Files.isRegularFile(p)) {
-				out += String.format("<a style=\"color:blue;\" href=\"%s\">&#128452;%s</a><br>", rel + sep + p.getFileName(), p.getFileName());
+				out += String.format("<a style=\"color:blue;\" href=\"%s\">&#128452;%s</a><br>", rel + p.getFileName(), p.getFileName());
 			}
 
 		}

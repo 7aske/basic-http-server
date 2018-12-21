@@ -7,13 +7,13 @@ import static server.utils.ServerUtils.pathJoin;
 public class HandlerUtils {
 	// parse request path so it return the absolute path to the requested file
 	public static String parsePath(String root, String rel) {
-//		switch (rel) {
-//			case "/":
-//				return pathJoin(root, "index.html");
-//			default:
-//				return pathJoin(root, rel);
-//		}
-		return pathJoin(root, rel);
+		switch (rel) {
+			case "/":
+				return pathJoin(root, "index.html");
+			default:
+				return pathJoin(root, rel);
+		}
+		//return pathJoin(root, rel);
 	}
 
 	public static byte[] readResource(InputStream in) throws IOException {

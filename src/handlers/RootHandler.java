@@ -2,6 +2,7 @@ package handlers;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import server.Server;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,40 +14,53 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static handlers.utils.ClientUtils.generateHTML;
-import static handlers.utils.HandlerUtils.*;
+import static handlers.utils.HandlerUtils.getContentType;
+import static handlers.utils.HandlerUtils.readResource;
+import static server.utils.ServerUtils.pathJoin;
+
 
 public class RootHandler implements HttpHandler {
 	private String root;
+	private Server server;
 	private List<Path> validPaths;
 
-	public RootHandler(String root) {
-		this.root = root;
+	public RootHandler(Server s) {
+		this.root = s.getRootDir();
+		this.server = s;
 		try {
 			validPaths = Files.walk(Paths.get(this.root)).collect(Collectors.toList());
 			//validPaths = Files.walk(Paths.get(this.root)).filter(p -> Files.isRegularFile(p)).collect(Collectors.toList());
-
 		} catch (IOException e) {
 			validPaths = new ArrayList<>();
 		}
-		validPaths.forEach(System.out::println);
 	}
 
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
 		final String METHOD = exchange.getRequestMethod().toUpperCase();
 		// Print out method and request url for debugging
-		System.out.printf("%s %s\n", METHOD, exchange.getRequestURI().getPath());
+		if (!server.isSILENT())
+			System.out.printf("%s %s\n", METHOD, exchange.getRequestURI().getPath());
 		if (METHOD.equals("GET")) {
 			String path = exchange.getRequestURI().getPath();
 			byte[] content;
 			String contentType;
 			int status;
-			if (validPaths.contains(Paths.get(parsePath(root, path)))) {
-				if (Files.isDirectory(Paths.get(parsePath(root, path)))) {
-					content = generateHTML(parsePath(root, path), path).getBytes();
+			// set cors headers if enabled
+			if (server.isCORS())
+				exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+			if (validPaths.contains(Paths.get(pathJoin(server.getRootDir(), path)))) {
+				if (Files.isDirectory(Paths.get(pathJoin(server.getRootDir(), path)))) {
+					// autoserve index.html if it exists in the first level of root folder structure
+					if (server.isAUTOINDEX() && Files.walk(Paths.get(pathJoin(root, path)), 1).anyMatch(p -> p.endsWith("index.html"))) {
+						content = readResource(new FileInputStream(pathJoin(root, path, "index.html")));
+					} else {
+						content = generateHTML(pathJoin(server.getRootDir(), path), path).getBytes();
+					}
 					contentType = "text/html";
 				} else {
-					content = readResource(new FileInputStream(parsePath(root, path)));
+
+					content = readResource(new FileInputStream(pathJoin(server.getRootDir(), path)));
 					contentType = getContentType(path);
 				}
 				status = 200;
