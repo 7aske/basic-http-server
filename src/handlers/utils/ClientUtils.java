@@ -29,6 +29,7 @@ public class ClientUtils {
 					"</html>";
 
 	public static String generateHTML(String root, String rel) throws IOException {
+		String sep = "/";
 		String out = HTMLUpper;
 		out += "<a style=\"font-size:24px\" href=\"/\">" + rel + "</a><hr>";
 		// some weird lambda sorting
@@ -49,7 +50,7 @@ public class ClientUtils {
 				}
 				out += String.format("<a style=\"text-decoration:underline;color:black;\" href=\"%s\">&larr;%s</a><br>", parent, "Back");
 			} else if (Files.isDirectory(p)) {
-				out += String.format("<a style=\"color:black;\" href=\"%s/\">&#128193;%s/</a><br>", rel + p.getFileName().toString(), p.getFileName());
+				out += String.format("<a style=\"color:black;\" href=\"%s/\">&#128193;%s/</a><br>", rel + sep + p.getFileName().toString(), p.getFileName());
 			} else if (Files.isRegularFile(p)) {
 				out += String.format("<a style=\"color:blue;\" href=\"%s\">&#128452;%s</a><br>", rel + p.getFileName(), p.getFileName());
 			}
