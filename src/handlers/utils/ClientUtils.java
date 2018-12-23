@@ -52,7 +52,7 @@ public class ClientUtils {
 			} else if (Files.isDirectory(p)) {
 				out += String.format("<a style=\"color:black;\" href=\"%s/\">&#128193;%s/</a><br>", rel + sep + p.getFileName().toString(), p.getFileName());
 			} else if (Files.isRegularFile(p)) {
-				out += String.format("<a style=\"color:blue;\" href=\"%s\">&#128452;%s</a><br>", rel + p.getFileName(), p.getFileName());
+				out += String.format("<a style=\"color:blue;\" href=\"%s\">&#128462;%s</a><br>", rel + p.getFileName(), p.getFileName());
 			}
 
 		}
