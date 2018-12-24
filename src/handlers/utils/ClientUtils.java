@@ -29,7 +29,7 @@ public class ClientUtils {
 					"</html>";
 
 	public static String generateHTML(String root, String rel) throws IOException {
-		String sep = "/";
+		String sep = rel.endsWith("/") ? "" : "/";
 		String out = HTMLUpper;
 		out += "<a style=\"font-size:24px\" href=\"/\">" + rel + "</a><hr>";
 		// some weird lambda sorting
