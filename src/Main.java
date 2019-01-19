@@ -14,7 +14,7 @@ public class Main {
 				System.out.println("Usage: java -jar basic-http-server.jar [folder] [port]");
 				System.out.println("--silent    - Supresses STDOUT request logging");
 				System.out.println("--cors      - Enables Cross-Origin request headers");
-				System.out.println("--noindex     - Disables auto-serving index.html files");
+				System.out.println("--noindex   - Disables auto-serving index.html files");
 
 				return;
 			}
