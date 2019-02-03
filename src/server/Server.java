@@ -16,7 +16,7 @@ public class Server {
 
 	public Server(String root, int port) throws IOException {
 
-		this.rootDir = root;
+		rootDir = root;
 		System.out.printf("Root: %s\n", root);
 		HttpServer httpServer = HttpServer.create();
 		httpServer.createContext("/", new RootHandler(this));
@@ -67,4 +67,3 @@ public class Server {
 		this.AUTOINDEX = AUTOINDEX;
 	}
 }
-
